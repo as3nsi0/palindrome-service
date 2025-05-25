@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 from app import schemas, palindrome, database
 from app.models import Detection
@@ -25,3 +26,8 @@ def create_detection(detection: schemas.Palindrome, db: Session = Depends(get_db
     db.commit()
     db.refresh(detection)
     return detection
+
+@router.get("/", response_model=list[schemas.Detection])
+def get_all_detections(db: Session = Depends(get_db)):
+    result = db.execute(select(Detection))
+    return result.scalars().all()
