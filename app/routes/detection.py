@@ -1,10 +1,15 @@
-from http.client import HTTPException
+from app.utils import logger_config
 
-from fastapi import APIRouter, Depends, HTTPException
+from datetime import datetime
+from http.client import HTTPException
+from typing import Optional, List
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import select
 
 from app import schemas, palindrome, database, models
+
+logger = logger_config.setup_logger(__name__)
 
 router = APIRouter(prefix="/detections", tags=["Detections"])
 
@@ -28,10 +33,26 @@ def create_detection(detection: schemas.Palindrome, db: Session = Depends(get_db
     db.refresh(detection)
     return detection
 
-@router.get("/", response_model=list[schemas.Detection])
-def get_all_detections(db: Session = Depends(get_db)):
-    result = db.execute(select(models.Detection))
-    return result.scalars().all()
+@router.get("/", response_model=List[schemas.Detection])
+def list_detections(language: Optional[str] = Query(default=None,
+                                                    description="Filter by language",
+                                                    example="Spanish"),
+                    start_date: Optional[datetime] = Query(default=None,
+                                                           description="Filter by language (ISO 8601)",
+                                                           example="2025-05-23T16:11:54"),
+                    end_date: Optional[datetime] = Query(default=None,
+                                                         description="Filter to date (ISO 8601)",
+                                                         example="2025-05-26T16:11:54"),
+                    db: Session = Depends(get_db)):
+
+    query = db.query(models.Detection)
+    if language and language.isalpha():
+        query = query.filter(models.Detection.language == language)
+    if start_date:
+        query = query.filter(models.Detection.created_at >= start_date)
+    if end_date:
+        query = query.filter(models.Detection.created_at <= end_date)
+    return query.order_by(models.Detection.created_at.desc()).all()
 
 @router.delete("/{detection_id}", response_model=schemas.Detection)
 def delete_detection(detection_id: int, db: Session = Depends(get_db)):
