@@ -13,6 +13,12 @@ This service offers the possibility to manage the detections of palindromes base
 | GET    | `/detections/{id}`     | Retrieves the result of a specific palindrome detection by its ID.         |
 | DELETE | `/detections/{id}`     | Deletes a specific palindrome detection by its ID.                         |
 
+## Documentation 
+Access to the documentation through:
+
+`http://127.0.0.1:8000/docs`
+
+
 ## Test
 In order to run the tests, run the following line:
 
