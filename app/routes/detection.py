@@ -54,6 +54,14 @@ def list_detections(language: Optional[str] = Query(default=None,
         query = query.filter(models.Detection.created_at <= end_date)
     return query.order_by(models.Detection.created_at.desc()).all()
 
+@router.get("/{detection_id}", response_model=schemas.Detection)
+def find_specific_detection(detection_id: int,
+                            db: Session = Depends(get_db)):
+    detection = db.query(models.Detection).filter(models.Detection.id == detection_id).first()
+    if not detection:
+        raise HTTPException(status_code=404, detail="Detection not found")
+    return detection
+
 @router.delete("/{detection_id}", response_model=schemas.Detection)
 def delete_detection(detection_id: int, db: Session = Depends(get_db)):
     def __get_detection_by_id(db: Session, detection_id:int):
