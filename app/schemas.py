@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class Palindrome(BaseModel):
+class DetectionCreate(BaseModel):
     text: str
     language: str
 

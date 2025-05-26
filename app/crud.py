@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app import palindrome, schemas, models
 
-def create_detection(detection: schemas.Palindrome,
+def create_detection(detection: schemas.DetectionCreate,
                      db: Session) -> schemas.Detection:
     is_palindrome = palindrome.is_palindrome(detection.text)
     detection = models.Detection(

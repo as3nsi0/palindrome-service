@@ -21,7 +21,7 @@ def get_db():
         db.close()
 
 @router.post("/", response_model=schemas.Detection)
-def create_detection(detection: schemas.Palindrome, db: Session = Depends(get_db)):
+def create_detection(detection: schemas.DetectionCreate, db: Session = Depends(get_db)):
     return crud.create_detection(detection=detection,
                                  db=db)
 
