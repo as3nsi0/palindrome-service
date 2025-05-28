@@ -8,3 +8,6 @@ def test_spanish_palindrome():
 
 def test_not_palindrome():
     assert not is_palindrome("Este ejemplo no es un palíndromo")
+
+def test_palindrome_with_special_character():
+    assert is_palindrome("Ñoño rañón, noñar oñoñ.")

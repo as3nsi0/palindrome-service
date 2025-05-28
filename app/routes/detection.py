@@ -21,21 +21,21 @@ def get_db():
         db.close()
 
 @router.post("/", response_model=schemas.Detection)
-def create_detection(detection: schemas.DetectionCreate, db: Session = Depends(get_db)):
-    return crud.create_detection(detection=detection,
+def create_detection(detection_create: schemas.DetectionCreate, db: Session = Depends(get_db)):
+    return crud.create_detection(detection_create=detection_create,
                                  db=db)
 
 @router.get("/", response_model=List[schemas.Detection])
 def list_detections(language: Optional[str] = Query(default=None,
                                                     description="Filter by language",
-                                                    example="Spanish",
-                                                    regex="^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]+$"),
+                                                    examples=["Spanish"],
+                                                    pattern="^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]+$"),
                     start_date: Optional[datetime] = Query(default=None,
                                                            description="Filter by language (ISO 8601)",
-                                                           example="2025-05-23T16:11:54"),
+                                                           examples=["2025-05-23T16:11:54"]),
                     end_date: Optional[datetime] = Query(default=None,
                                                          description="Filter to date (ISO 8601)",
-                                                         example="2025-05-26T16:11:54"),
+                                                         examples=["2025-05-26T16:11:54"]),
                     db: Session = Depends(get_db)):
 
     return crud.list_detections(language=language,
