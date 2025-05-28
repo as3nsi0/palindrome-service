@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class DetectionCreate(BaseModel):
@@ -6,11 +6,10 @@ class DetectionCreate(BaseModel):
     language: str
 
 class Detection(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     text: str
     language: str
     is_palindrome: bool
     created_at: datetime
-
-    class Config:
-        from_attributes = True

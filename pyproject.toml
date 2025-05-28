@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app"]
+
+[project]
+name = "palindrome-service"
+version = "0.1"
+description = "Palindrome detection service"
+authors = [
+    {name = "Victor", email = "victor.asensio94@gmail.com"},
+]
+dependencies = [
+    "pydantic==2.11.4",
+    "fastapi==0.115.12",
+    "gunicorn==23.0.0",
+    "uvicorn==0.34.2",
+    "sqlalchemy==2.0.41",
+    "psycopg2-binary==2.9.10",
+    "python-dotenv==1.1.0",
+    "pytest==8.3.5",
+    "pytest-cov==6.1.1",
+    "httpx==0.28.1"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
